@@ -15,15 +15,9 @@ class MagentoAuth extends AuthPlugin {
 
     function authenticate($username, $password) {
         require_once $GLOBALS['wgMageHome'];
-        if(!isset($_SESSION)) {
-            session_set_cookie_params(0);
-            session_start();
-        }
-        $_SESSION["username"] = strtolower($username);
-        $_SESSION["password"] = $password;
         Mage::app();
         $user = Mage::getModel('admin/user')->setWebsiteId(Mage::app()->getStore()->getWebsiteId());
-        $auth = $user->authenticate($_SESSION["username"], $_SESSION["password"]);
+        $auth = $user->authenticate(strtolower($username), $password);
         if(strlen($auth) > 0){
             return true;
         } else {
